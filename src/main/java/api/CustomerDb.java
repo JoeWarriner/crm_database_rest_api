@@ -9,8 +9,8 @@ public class CustomerDb {
 
     private final AtomicLong counter = new AtomicLong();
 
-    public void addCustomer(Customer customer){
-        customers.put(counter.incrementAndGet(), customer);
+    public void addCustomer(Long id, Customer customer){
+        customers.put(id, customer);
     }
 
     public Customer getCustomer(Long id){
