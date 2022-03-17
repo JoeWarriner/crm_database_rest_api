@@ -2,26 +2,25 @@ package api;
 
 public class Customer {
     private String name;
-    private String phoneNumber;
 
-    public Customer(String name, String phoneNumber){
+
+    public Customer(){}
+
+    public Customer(String name){
         this.name = name;
-        this.phoneNumber = phoneNumber;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
     public String getName(){
         return name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     @Override
     public String toString() {
         return "Customer{" +
                 "name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }
