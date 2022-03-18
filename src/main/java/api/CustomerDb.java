@@ -28,19 +28,26 @@ public class CustomerDb {
         jdbcTemplate.execute(
                 "CREATE TABLE IF NOT EXISTS customers( " +
                         "CustomerID SERIAL PRIMARY KEY, " +
-                        "CustomerName varchar(255));"
+                        "CustomerName varchar(255)," +
+                        "CustomerOrganisation varchar(255)," +
+                        "CustomerPhoneNumber varchar(255)," +
+                        "CustomerEmail varchar(255)" +
+                        ");"
         );
     }
 
 
-    public int addCustomer(Customer customer){
+    public int addCustomer(NewCustomer newcustomer){
 
-        String sqlcommand = "INSERT INTO customers VALUES (DEFAULT, ?) RETURNING CustomerID";
+        String sqlcommand = "INSERT INTO customers VALUES (DEFAULT, ?, ?, ?, ?) RETURNING CustomerID";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sqlcommand, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,customer.getName());
+            ps.setString(1,newcustomer.getName());
+            ps.setString(2,newcustomer.getOrganisation());
+            ps.setString(3,newcustomer.getPhoneNumber());
+            ps.setString(4,newcustomer.getEmail());
             return ps;
         }, keyHolder);
 
@@ -58,6 +65,10 @@ public class CustomerDb {
                 (rs, rowNum) -> {
                     Customer customer = new Customer();
                     customer.setName(rs.getString("CustomerName"));
+                    customer.setId(rs.getInt("CustomerID"));
+                    customer.setOrganisation(rs.getString("CustomerOrganisation"));
+                    customer.setEmail(rs.getString("CustomerEmail"));
+                    customer.setPhoneNumber(rs.getString("CustomerPhoneNumber"));
                     return customer;
                 },
                 id);
